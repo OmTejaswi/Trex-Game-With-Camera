@@ -175,15 +175,7 @@ function draw() {
 }
 
 function reset(){
-  gameState = PLAY;
-  gameOver.visible = false;
-  restart.visible = false;
-  
-  obstaclesGroup.destroyEach();
-  cloudsGroup.destroyEach();
-  
-  trex.changeAnimation("running",trex_running);
-  score = 0;
+  window.location.reload();
 }
 
 
