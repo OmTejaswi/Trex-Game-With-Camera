@@ -136,8 +136,8 @@ function draw() {
       gameOver.visible = true;
       restart.visible = true;
 
-      gameOver.x = trex.x+200;
-      restart.x = trex.x+200;
+      gameOver.x = trex.x+250;
+      restart.x = trex.x+250;
      
      //change the trex animation
       trex.changeAnimation("collided", trex_collided);
@@ -169,6 +169,9 @@ function draw() {
 
 
   drawSprites();
+
+  fill("grey");
+  text("Use Right Arrow Key To Move",width/2,height/3);
 }
 
 function reset(){
