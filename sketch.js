@@ -2,7 +2,7 @@ var PLAY = 1;
 var END = 0;
 var gameState = PLAY;
 
-var trex, trex_running, trex_collided;
+var trex, trex_running, trex_collided, trex_jumpinging;
 var ground, invisibleGround, groundImage;
 
 var cloudsGroup, cloudImage;
@@ -15,6 +15,7 @@ var jumpSound , checkPointSound, dieSound
 function preload(){
   trex_running = loadAnimation("assest/trex1.png","assest/trex3.png","assest/trex4.png");
   trex_collided = loadAnimation("assest/trex_collided.png");
+  trex_jumpinging = loadAnimation("assest/trex1.png")
   
   groundImage = loadImage("assest/ground2.png");
   
@@ -39,11 +40,11 @@ function setup() {
   createCanvas(600, 200);
 
   var message = "This is a message";
- console.log(message)
   
   trex = createSprite(50,160,20,50);
   trex.addAnimation("running", trex_running);
   trex.addAnimation("collided", trex_collided);
+  trex.addAnimation("jump",trex_jumpinging);
   
 
   trex.scale = 0.5;
@@ -70,7 +71,7 @@ function setup() {
   cloudsGroup = createGroup();
 
   
-  trex.setCollider("rectangle",0,0,trex.width-10,trex.height-10);
+  trex.setCollider("rectangle",0,0,trex.width,trex.height);
   trex.debug = false;
   
   score = 0;
@@ -105,14 +106,14 @@ function draw() {
     if(score>0 && score%100 === 0){
        checkPointSound.play() 
     }
-
-    
-    console.log(ground.x);
     
     //jump when the space key is pressed
     if(keyDown("space")&& trex.y >= 160) {
+        trex.changeAnimation("jump",trex_jumpinging)
         trex.velocityY = -12;
         jumpSound.play();
+    } else if(trex.isTouching(invisibleGround)){
+      trex.changeAnimation("running");
     }
     
     //add gravity
@@ -130,6 +131,10 @@ function draw() {
         gameState = END;
         dieSound.play()
       
+    }
+    if(trex.x >= 8800) {
+      score = 1000;
+      gameState = END;
     }
   }
    else if (gameState === END) {
@@ -214,7 +219,7 @@ function spawnObstacles(){
 function spawnClouds() {
   //write code here to spawn the clouds
   if (frameCount % 60 === 0) {
-    var cloud = createSprite(trex.x+500,120,40,10);
+    var cloud = createSprite(trex.x+1000,120,40,10);
     cloud.y = Math.round(random(80,120));
     cloud.addImage(cloudImage);
     cloud.scale = 0.5;
